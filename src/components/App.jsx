@@ -29,23 +29,13 @@ export class App extends Component {
     this.setState({ showLoad: true });
     fetchImage(serch, page, perPage)
       .then(res => {
-        if (res.hits.length) {
-          return this.setState({
-            imageList: [...imageList, ...res.hits],
-            totalImg: res.totalHits,
-            searchImg: serch,
-            page: page + 1,
-            status: 'resolved',
-          });
-        } else {
-          return this.setState({
-            imageList: [...imageList, ...res.hits],
-            totalImg: res.totalHits,
-            searchImg: serch,
-            page: page + 1,
-            status: 'rejected',
-          });
-        }
+        return this.setState({
+          imageList: [...imageList, ...res.hits],
+          totalImg: res.totalHits,
+          searchImg: serch,
+          page: page + 1,
+          status: res.hits.length ? 'resolved' : 'rejected',
+        });
       })
       .finally(() => this.setState({ showLoad: false }));
   };
