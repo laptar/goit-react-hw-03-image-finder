@@ -11,12 +11,30 @@ export class Serchbar extends Component {
   };
   handleSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit(this.state.input);
+    if (this.state.input.trim() !== '') {
+      this.props.onSubmit(this.state.input);
+      this.handleReset();
+    }
+  };
+  handleReset = () => {
     this.setState({ input: '' });
   };
+  handlePerPage = e => {
+    this.props.onChangePerPage(e.target.value);
+  };
+
   render() {
     return (
       <header className={s.searchbar}>
+        <label className={s.show}>
+          Show pictures:
+          <select name="perPage" onChange={this.handlePerPage}>
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={15}>15</option>
+            <option value={20}>20</option>
+          </select>
+        </label>
         <form className={s.form} onSubmit={this.handleSubmit}>
           <button type="submit" className={s.button}>
             <span className={s.buttonLabel}>Search</span>
