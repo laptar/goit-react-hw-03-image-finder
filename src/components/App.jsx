@@ -21,6 +21,7 @@ export class App extends Component {
   };
   componentDidUpdate(prevProps, prevState) {
     const { searchImg, page, imageList, perPage } = this.state;
+    console.log(imageList);
 
     if (prevState.page !== page || prevState.searchImg !== searchImg) {
       this.setState({ showLoad: true });
@@ -40,7 +41,9 @@ export class App extends Component {
   };
 
   handleSubmit = input => {
-    this.setState({ searchImg: input, page: 1, imageList: [] });
+    if (input !== this.state.searchImg) {
+      this.setState({ searchImg: input, page: 1, imageList: [] });
+    }
   };
 
   handleMoreImg = () => {

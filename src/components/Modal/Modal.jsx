@@ -25,6 +25,7 @@ export class Modal extends Component {
     );
   }
 }
-Modal.protoTypes = {
+Modal.propTypes = {
+  onClose: PropTypes.func,
   imgUrl: PropTypes.string,
 };
