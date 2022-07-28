@@ -1,16 +1,23 @@
+import PropTypes from 'prop-types';
 import s from './ImageGalleryItem.module.css';
 
 export const ImageGalleyItem = ({
-  imageList: { previewURL, tags, largeImageURL },
+  imageList: { webformatURL, tags, largeImageURL },
 }) => {
   return (
     <li className={s.galleryItem}>
       <img
         className={s.image}
-        src={previewURL}
+        src={webformatURL}
         alt={tags}
         data-source={largeImageURL}
       />
     </li>
   );
+};
+
+ImageGalleyItem.propTypes = {
+  webformatURL: PropTypes.string,
+  tags: PropTypes.string,
+  largeImageURL: PropTypes.string,
 };

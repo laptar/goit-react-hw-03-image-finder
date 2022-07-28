@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { Serchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { ImageGalleyItem } from './ImageGalleryItem/ImageGalleryItem';
-import { fetchImage } from './FetchApi';
+import { fetchImage } from '../FetchApi';
 import { Button } from './Button/Button';
 import { Modal } from './Modal/Modal';
 import { Loader } from './Loader/Loader';
@@ -19,33 +19,39 @@ export class App extends Component {
     modalImg: '',
     status: 'idle',
   };
+  componentDidUpdate(prevProps, prevState) {
+    const { searchImg, page, imageList, perPage } = this.state;
+
+    if (prevState.page !== page || prevState.searchImg !== searchImg) {
+      this.setState({ showLoad: true });
+      fetchImage(searchImg, page, perPage)
+        .then(res => {
+          return this.setState({
+            imageList: [...imageList, ...res.hits],
+            totalImg: res.totalHits,
+            status: res.hits.length ? 'resolved' : 'rejected',
+          });
+        })
+        .finally(() => this.setState({ showLoad: false }));
+    }
+  }
   handlePerPage = perPage => {
     this.setState({ perPage });
   };
+
   handleSubmit = input => {
-    this.handleFeth(input, 1, [], this.state.perPage);
+    this.setState({ searchImg: input, page: 1, imageList: [] });
   };
-  handleFeth = (serch, page, imageList, perPage) => {
-    this.setState({ showLoad: true });
-    fetchImage(serch, page, perPage)
-      .then(res => {
-        return this.setState({
-          imageList: [...imageList, ...res.hits],
-          totalImg: res.totalHits,
-          searchImg: serch,
-          page: page + 1,
-          status: res.hits.length ? 'resolved' : 'rejected',
-        });
-      })
-      .finally(() => this.setState({ showLoad: false }));
-  };
+
   handleMoreImg = () => {
-    const { searchImg, page, imageList, perPage } = this.state;
-    this.handleFeth(searchImg, page, imageList, perPage);
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+    console.log();
   };
+
   handleToglModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
+
   handleClick = e => {
     if (e.target.dataset.source) {
       this.setState({ modalImg: e.target.dataset.source });
@@ -55,6 +61,7 @@ export class App extends Component {
       this.handleToglModal();
     }
   };
+
   render() {
     const {
       searchImg,

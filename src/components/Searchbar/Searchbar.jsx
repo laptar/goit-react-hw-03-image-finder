@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import s from './Serchbar.module.css';
 
 export class Serchbar extends Component {
@@ -54,3 +56,8 @@ export class Serchbar extends Component {
     );
   }
 }
+
+Serchbar.propTypes = {
+  onSubmit: PropTypes.func,
+  onChangePerPage: PropTypes.func,
+};
